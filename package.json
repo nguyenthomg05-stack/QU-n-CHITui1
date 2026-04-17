@@ -2,6 +2,14 @@
   "name": "tra-order",
   "version": "1.0.0",
   "description": "Hệ thống đặt trà online với thông báo Telegram",
-  "engines": { "node": "18.x" }
+  "main": "api/order.js",
+  "scripts": {
+    "start": "node api/order.js"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
 }
-
