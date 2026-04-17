@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUÁN CHỊ TUI</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #ff6b81;
+    --pink-light: #fff0f2;
+    --pink-dark: #e0455e;
+    --brown: #5c3d2e;
+    --cream: #fdf6ee;
+    --card-bg: #ffffff;
+    --text: #2d1a0e;
+    --muted: #9e7b6a;
+    --radius: 16px;
+    --shadow: 0 2px 12px rgba(92,61,46,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--pink);
+    padding: 24px 20px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -30px; left: -30px;
+    width: 120px; height: 120px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; right: -10px;
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+  }
+  header h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 32px;
+    color: white;
+    letter-spacing: 1px;
+    position: relative;
+  }
+  header p {
+    color: rgba(255,255,255,0.85);
+    font-size: 14px;
+    margin-top: 4px;
+    position: relative;
+  }
+
+  /* TELEGRAM CONFIG */
+  .tg-config {
+    background: #e8f4fd;
+    border: 1.5px solid #b3d9f5;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin: 16px;
+    font-size: 13px;
+    color: #1a5276;
+  }
+  .tg-config summary {
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tg-config summary::-webkit-details-marker { display: none; }
+  .tg-config .fields { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .tg-config input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #b3d9f5;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Nunito', sans-serif;
+    background: white;
+    color: var(--text);
+  }
+  .tg-config .tg-save {
+    background: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+  }
+  .tg-config .tg-save:hover { background: #1a6fa3; }
+  .tg-saved { color: #1a5276; font-size: 12px; margin-top: 4px; display: none; }
+
+  /* SECTION */
+  .section { padding: 8px 16px; }
+  .section-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--brown);
+    margin: 20px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(to right, var(--pink-light), transparent);
+    border-radius: 2px;
+  }
+
+  /* MENU GRID */
+  .menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+  /* ITEM CARD */
+  .item {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .item img {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #f5e6da;
+  }
+  .item h3 {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--brown);
+    line-height: 1.3;
+  }
+  .item .price {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--pink);
+  }
+
+  /* SELECT */
+  .item select {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1.5px solid #f0d8d0;
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+    background: white;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239e7b6a'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+
+  /* TOPPING */
+  .topping-list { display: flex; flex-direction: column; gap: 3px; }
+  .topping-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 2px 0;
+  }
+  .topping-item input[type=checkbox] {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--pink);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .topping-item .tp-price {
+    margin-left: auto;
+    color: var(--pink);
+    font-weight: 700;
+    font-size: 10px;
+  }
+
+  /* ADD BUTTON */
+  .btn-add {
+    margin-top: 4px;
+    padding: 9px;
+    width: 100%;
+    border: none;
+    background: var(--pink);
+    color: white;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-add:hover { background: var(--pink-dark); }
+  .btn-add:active { transform: scale(0.97); }
+
+  /* CART */
+  .cart-section {
+    margin: 20px 16px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .cart-header {
+    background: var(--pink);
+    padding: 14px 16px;
+    color: white;
+    font-size: 16px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .cart-body { padding: 14px 16px; }
+  .cart-empty {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 20px 0;
+  }
+
+  /* CART ITEM */
+  .cart-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px dashed #f0e0d8;
+  }
+  .cart-item:last-child { border-bottom: none; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-size: 13px; font-weight: 700; color: var(--brown); line-height: 1.4; }
+  .cart-item-price { font-size: 13px; color: var(--pink); font-weight: 800; margin-top: 2px; }
+  .btn-remove {
+    background: #fff0f2;
+    border: none;
+    color: var(--pink);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 800;
+    transition: background 0.15s;
+  }
+  .btn-remove:hover { background: var(--pink); color: white; }
+
+  /* TOTAL */
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0 4px;
+    margin-top: 4px;
+    border-top: 2px solid var(--pink-light);
+  }
+  .cart-total span:first-child { font-size: 15px; font-weight: 700; color: var(--brown); }
+  .cart-total span:last-child { font-size: 20px; font-weight: 800; color: var(--pink); }
+
+  /* CUSTOMER INFO */
+  .customer-info { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .customer-info input, .customer-info textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #f0d8d0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+    background: var(--cream);
+    transition: border-color 0.15s;
+    resize: none;
+  }
+  .customer-info input:focus, .customer-info textarea:focus {
+    outline: none;
+    border-color: var(--pink);
+  }
+  .customer-info textarea { height: 70px; }
+  .input-label { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 2px; }
+
+  /* CHECKOUT BUTTON */
+  .btn-checkout {
+    width: 100%;
+    margin-top: 14px;
+    padding: 15px;
+    background: var(--pink);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    transition: background 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-checkout:hover { background: var(--pink-dark); }
+  .btn-checkout:active { transform: scale(0.98); }
+  .btn-checkout:disabled { background: #ccc; cursor: not-allowed; }
+
+  /* SUCCESS */
+  .success-msg {
+    display: none;
+    background: #eafaf1;
+    border: 1.5px solid #a9dfbf;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: #1e8449;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  /* QR SECTION */
+  .qr-section {
+    margin: 16px 16px 30px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    text-align: center;
+  }
+  .qr-section h3 {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--brown);
+    margin-bottom: 10px;
+  }
+  .qr-section p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .qr-url-input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid #f0d8d0;
+    border-radius: 10px;
+    font-size: 13px;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+    background: var(--cream);
+    margin-bottom: 10px;
+  }
+  .qr-url-input:focus { outline: none; border-color: var(--pink); }
+  .btn-genqr {
+    background: var(--brown);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    transition: background 0.15s;
+  }
+  .btn-genqr:hover { background: #3d2718; }
+  #qr-output { margin-top: 16px; }
+  #qr-output img { border-radius: 12px; border: 3px solid var(--pink-light); }
+  .qr-download {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--pink);
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧋 Quán Chị Tui</h1>
+  <p>Trà sữa - Trà trái cây - Soda - Cafe</p>
+</header>
+
+<!-- CẤU HÌNH TELEGRAM -->
+<div class="section">
+  <details class="tg-config" id="tg-details">
+    <summary>⚙️ Cài đặt Telegram Bot (chủ quán)</summary>
+    <div class="fields">
+      <div>
+        <div class="input-label">Bot Token</div>
+        <input type="text" id="tg-token" placeholder="Ví dụ: 7123456789:AAF..." />
+      </div>
+      <div>
+        <div class="input-label">Chat ID của bạn</div>
+        <input type="text" id="tg-chatid" placeholder="Ví dụ: 123456789" />
+      </div>
+      <button class="tg-save" onclick="saveTelegram()">Lưu cài đặt</button>
+      <div class="tg-saved" id="tg-saved">✅ Đã lưu! Bạn sẽ nhận thông báo qua Telegram.</div>
+    </div>
+  </details>
+</div>
+
+<!-- TRÀ SỮA -->
+<div class="section">
+  <div class="section-title">🧋 Trà Sữa</div>
+  <div class="menu">
+    <div class="item">
+      <img src="img/trasua.jpg" onerror="this.style.display='none'">
+      <h3>Truyền thống</h3>
+      <div class="price">20.000đ</div>
+      <select><option value="0">Size M</option><option value="5000">Size L (+5K)</option></select>
+      <div class="topping-list">
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu đen <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu trắng <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu khoai dẻo <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Thạch dừa <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="10000"> Phô mai viên <span class="tp-price">+10k</span></label>
+        <label class="topping-item"><input type="checkbox" value="10000"> Sốt khoai môn <span class="tp-price">+10k</span></label>
+      </div>
+      <button class="btn-add" onclick="addFull('Trà sữa Truyền thống',20000,this)">+ Thêm vào giỏ</button>
+    </div>
+    <div class="item">
+      <img src="img/matcha.jpg" onerror="this.style.display='none'">
+      <h3>Matcha / Cacao</h3>
+      <div class="price">25.000đ</div>
+      <select><option value="0">Size M</option><option value="5000">Size L (+5K)</option></select>
+      <div class="topping-list">
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu đen <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu trắng <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu khoai dẻo <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Thạch dừa <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="10000"> Phô mai viên <span class="tp-price">+10k</span></label>
+        <label class="topping-item"><input type="checkbox" value="10000"> Sốt khoai môn <span class="tp-price">+10k</span></label>
+      </div>
+      <button class="btn-add" onclick="addFull('Trà sữa Matcha/Cacao',25000,this)">+ Thêm vào giỏ</button>
+    </div>
+    <div class="item">
+      <img src="img/thaixanh.jpg" onerror="this.style.display='none'">
+      <h3>Thái xanh</h3>
+      <div class="price">20.000đ</div>
+      <select><option value="0">Size M</option><option value="5000">Size L (+5K)</option></select>
+      <div class="topping-list">
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu đen <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu trắng <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu khoai dẻo <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Thạch dừa <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="10000"> Phô mai viên <span class="tp-price">+10k</span></label>
+        <label class="topping-item"><input type="checkbox" value="10000"> Sốt khoai môn <span class="tp-price">+10k</span></label>
+      </div>
+      <button class="btn-add" onclick="addFull('Trà sữa Thái xanh',20000,this)">+ Thêm vào giỏ</button>
+    </div>
+    <div class="item">
+      <img src="img/khoaimon.jpg" onerror="this.style.display='none'">
+      <h3>Khoai môn</h3>
+      <div class="price">30.000đ</div>
+      <select><option value="0">Size M</option><option value="5000">Size L (+5K)</option></select>
+      <div class="topping-list">
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu đen <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu trắng <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu khoai dẻo <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Thạch dừa <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="10000"> Phô mai viên <span class="tp-price">+10k</span></label>
+        <label class="topping-item"><input type="checkbox" value="10000"> Sốt khoai môn <span class="tp-price">+10k</span></label>
+      </div>
+      <button class="btn-add" onclick="addFull('Trà sữa Khoai môn',30000,this)">+ Thêm vào giỏ</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRÀ TRÁI CÂY -->
+<div class="section">
+  <div class="section-title">🍓 Trà Trái Cây</div>
+  <div class="menu">
+    <div class="item"><h3>Mãng cầu</h3><div class="price">20.000đ</div><select><option value="0">Size M</option><option value="5000">Size L (+5K)</option></select><button class="btn-add" onclick="addFull('Trà Mãng cầu',20000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Ổi hồng</h3><div class="price">20.000đ</div><select><option value="0">Size M</option><option value="5000">Size L (+5K)</option></select><button class="btn-add" onclick="addFull('Trà Ổi hồng',20000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Đào</h3><div class="price">20.000đ</div><select><option value="0">Size M</option><option value="5000">Size L (+5K)</option></select><button class="btn-add" onclick="addFull('Trà Đào',20000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Vải</h3><div class="price">20.000đ</div><select><option value="0">Size M</option><option value="5000">Size L (+5K)</option></select><button class="btn-add" onclick="addFull('Trà Vải',20000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Kiwi</h3><div class="price">20.000đ</div><select><option value="0">Size M</option><option value="5000">Size L (+5K)</option></select><button class="btn-add" onclick="addFull('Trà Kiwi',20000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Chanh dây</h3><div class="price">20.000đ</div><select><option value="0">Size M</option><option value="5000">Size L (+5K)</option></select><button class="btn-add" onclick="addFull('Trà Chanh dây',20000,this)">+ Thêm vào giỏ</button></div>
+  </div>
+</div>
+
+<!-- SODA -->
+<div class="section">
+  <div class="section-title">🥤 Soda</div>
+  <div class="menu">
+    <div class="item"><h3>Soda Mãng cầu</h3><div class="price">25.000đ</div>
+      <div class="topping-list">
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu đen <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu trắng <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Thạch dừa <span class="tp-price">+5k</span></label>
+      </div>
+      <button class="btn-add" onclick="addFull('Soda Mãng cầu',25000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Soda Ổi hồng</h3><div class="price">25.000đ</div>
+      <div class="topping-list">
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu đen <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu trắng <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Thạch dừa <span class="tp-price">+5k</span></label>
+      </div>
+      <button class="btn-add" onclick="addFull('Soda Ổi hồng',25000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Soda Đào</h3><div class="price">25.000đ</div>
+      <div class="topping-list">
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu đen <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu trắng <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Thạch dừa <span class="tp-price">+5k</span></label>
+      </div>
+      <button class="btn-add" onclick="addFull('Soda Đào',25000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Soda Vải</h3><div class="price">25.000đ</div>
+      <div class="topping-list">
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu đen <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu trắng <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Thạch dừa <span class="tp-price">+5k</span></label>
+      </div>
+      <button class="btn-add" onclick="addFull('Soda Vải',25000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Soda Kiwi</h3><div class="price">25.000đ</div>
+      <div class="topping-list">
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu đen <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu trắng <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Thạch dừa <span class="tp-price">+5k</span></label>
+      </div>
+      <button class="btn-add" onclick="addFull('Soda Kiwi',25000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Soda Chanh dây</h3><div class="price">25.000đ</div>
+      <div class="topping-list">
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu đen <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Trân châu trắng <span class="tp-price">+5k</span></label>
+        <label class="topping-item"><input type="checkbox" value="5000"> Thạch dừa <span class="tp-price">+5k</span></label>
+      </div>
+      <button class="btn-add" onclick="addFull('Soda Chanh dây',25000,this)">+ Thêm vào giỏ</button></div>
+  </div>
+</div>
+
+<!-- CAFE -->
+<div class="section">
+  <div class="section-title">☕ Cafe</div>
+  <div class="menu">
+    <div class="item"><h3>Cafe đen</h3><div class="price">15.000đ</div><button class="btn-add" onclick="addFull('Cafe đen',15000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Cafe sữa</h3><div class="price">17.000đ</div><button class="btn-add" onclick="addFull('Cafe sữa',17000,this)">+ Thêm vào giỏ</button></div>
+    <div class="item"><h3>Cafe muối</h3><div class="price">25.000đ</div><button class="btn-add" onclick="addFull('Cafe muối',25000,this)">+ Thêm vào giỏ</button></div>
+  </div>
+</div>
+
+<!-- GIỎ HÀNG -->
+<div class="cart-section">
+  <div class="cart-header">🛒 Giỏ hàng</div>
+  <div class="cart-body">
+    <div id="cart-items">
+      <div class="cart-empty" id="cart-empty">Chưa có món nào. Chọn đồ uống bên trên nhé! 🧋</div>
+    </div>
+    <div class="cart-total" id="cart-total" style="display:none">
+      <span>Tổng cộng</span>
+      <span id="total-price">0đ</span>
+    </div>
+
+    <!-- THÔNG TIN KHÁCH -->
+    <div class="customer-info">
+      <div>
+        <div class="input-label">Tên của bạn *</div>
+        <input type="text" id="cust-name" placeholder="Ví dụ: Nguyễn Văn A">
+      </div>
+      <div>
+        <div class="input-label">Số điện thoại *</div>
+        <input type="tel" id="cust-phone" placeholder="Ví dụ: 0901234567">
+      </div>
+      <div>
+        <div class="input-label">Ghi chú (không bắt buộc)</div>
+        <textarea id="cust-note" placeholder="Ít ngọt, nhiều đá, không đá..."></textarea>
+      </div>
+    </div>
+
+    <button class="btn-checkout" onclick="checkout()">
+      📲 Đặt hàng ngay
+    </button>
+    <div class="success-msg" id="success-msg">
+      ✅ Đơn hàng đã được gửi! Chị Tui sẽ liên hệ bạn sớm nhé 🧋
+    </div>
+  </div>
+</div>
+
+<!-- TẠO QR CODE -->
+<div class="qr-section">
+  <h3>📱 Tạo mã QR cho quán</h3>
+  <p>Nhập URL website của bạn (sau khi deploy lên Netlify/GitHub Pages) để tạo mã QR cho khách quét.</p>
+  <input class="qr-url-input" type="url" id="qr-url" placeholder="https://quan-chi-tui.netlify.app" />
+  <br>
+  <button class="btn-genqr" onclick="genQR()">Tạo mã QR</button>
+  <div id="qr-output"></div>
+</div>
+
+<script>
+let cart = [];
+let orderCount = parseInt(localStorage.getItem('orderCount') || '0');
+
+function saveTelegram() {
+  const token = document.getElementById('tg-token').value.trim();
+  const chatId = document.getElementById('tg-chatid').value.trim();
+  if (!token || !chatId) { alert('Vui lòng nhập đủ Bot Token và Chat ID!'); return; }
+  localStorage.setItem('tg_token', token);
+  localStorage.setItem('tg_chatid', chatId);
+  document.getElementById('tg-saved').style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('tg-details').removeAttribute('open');
+  }, 1200);
+}
+
+window.addEventListener('load', () => {
+  const t = localStorage.getItem('tg_token');
+  const c = localStorage.getItem('tg_chatid');
+  if (t) document.getElementById('tg-token').value = t;
+  if (c) document.getElementById('tg-chatid').value = c;
+  if (t && c) document.getElementById('tg-saved').style.display = 'block';
+});
+
+function addFull(name, basePrice, btn) {
+  let price = basePrice;
+  let detail = name;
+
+  const size = btn.parentElement.querySelector('select');
+  if (size && size.value !== '0') {
+    detail += ' - Size L';
+    price += parseInt(size.value);
+  } else if (size) {
+    detail += ' - Size M';
+  }
+
+  const checkboxes = btn.parentElement.querySelectorAll('input[type=checkbox]');
+  let toppings = [];
+  checkboxes.forEach(cb => {
+    if (cb.checked) {
+      price += parseInt(cb.value);
+      toppings.push(cb.closest('label').textContent.trim().replace(/\+\d+k/i,'').trim());
+    }
+  });
+  if (toppings.length > 0) detail += ' + ' + toppings.join(', ');
+
+  cart.push({ name: detail, price, id: Date.now() + Math.random() });
+  renderCart();
+
+  // Reset
+  checkboxes.forEach(cb => cb.checked = false);
+  if (size) size.selectedIndex = 0;
+
+  btn.textContent = '✓ Đã thêm!';
+  setTimeout(() => btn.textContent = '+ Thêm vào giỏ', 1200);
+}
+
+function removeItem(id) {
+  cart = cart.filter(i => i.id !== id);
+  renderCart();
+}
+
+function renderCart() {
+  const container = document.getElementById('cart-items');
+  const empty = document.getElementById('cart-empty');
+  const totalDiv = document.getElementById('cart-total');
+  const totalEl = document.getElementById('total-price');
+
+  if (cart.length === 0) {
+    empty.style.display = 'block';
+    totalDiv.style.display = 'none';
+    container.innerHTML = '';
+    container.appendChild(empty);
+    return;
+  }
+
+  empty.style.display = 'none';
+  let html = '';
+  let total = 0;
+  cart.forEach(item => {
+    total += item.price;
+    html += `<div class="cart-item">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${item.price.toLocaleString('vi-VN')}đ</div>
+      </div>
+      <button class="btn-remove" onclick="removeItem(${item.id})">✕</button>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+  totalDiv.style.display = 'flex';
+  totalEl.textContent = total.toLocaleString('vi-VN') + 'đ';
+}
+
+async function checkout() {
+  if (cart.length === 0) { alert('Vui lòng chọn ít nhất 1 món!'); return; }
+
+  const name = document.getElementById('cust-name').value.trim();
+  const phone = document.getElementById('cust-phone').value.trim();
+  const note = document.getElementById('cust-note').value.trim();
+
+  if (!name) { alert('Vui lòng nhập tên của bạn!'); document.getElementById('cust-name').focus(); return; }
+  if (!phone) { alert('Vui lòng nhập số điện thoại!'); document.getElementById('cust-phone').focus(); return; }
+
+  const token = localStorage.getItem('tg_token');
+  const chatId = localStorage.getItem('tg_chatid');
+
+  const total = cart.reduce((s, i) => s + i.price, 0);
+  orderCount++;
+  localStorage.setItem('orderCount', orderCount);
+
+  let msg = `🧋 ĐƠN HÀNG MỚI #${orderCount}\n`;
+  msg += `━━━━━━━━━━━━━━━\n`;
+  msg += `👤 Khách: ${name}\n`;
+  msg += `📞 SĐT: ${phone}\n`;
+  msg += `━━━━━━━━━━━━━━━\n`;
+  cart.forEach((i, idx) => {
+    msg += `${idx + 1}. ${i.name}\n   ${i.price.toLocaleString('vi-VN')}đ\n`;
+  });
+  msg += `━━━━━━━━━━━━━━━\n`;
+  msg += `💰 TỔNG: ${total.toLocaleString('vi-VN')}đ\n`;
+  if (note) msg += `📝 Ghi chú: ${note}\n`;
+  msg += `⏰ ${new Date().toLocaleString('vi-VN')}`;
+
+  const btn = document.querySelector('.btn-checkout');
+  btn.disabled = true;
+  btn.textContent = 'Đang gửi...';
+
+  if (token && chatId) {
+    try {
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: msg })
+      });
+    } catch (e) {
+      console.error('Telegram error:', e);
+    }
+  } else {
+    console.log('Chưa cài Telegram Bot. Đơn hàng:\n' + msg);
+  }
+
+  cart = [];
+  renderCart();
+  document.getElementById('cust-name').value = '';
+  document.getElementById('cust-phone').value = '';
+  document.getElementById('cust-note').value = '';
+
+  btn.disabled = false;
+  btn.textContent = '📲 Đặt hàng ngay';
+
+  const successEl = document.getElementById('success-msg');
+  successEl.style.display = 'block';
+  setTimeout(() => successEl.style.display = 'none', 4000);
+}
+
+function genQR() {
+  const url = document.getElementById('qr-url').value.trim();
+  if (!url) { alert('Vui lòng nhập URL website!'); return; }
+  const encoded = encodeURIComponent(url);
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encoded}&color=5c3d2e&bgcolor=fdf6ee`;
+  document.getElementById('qr-output').innerHTML = `
+    <img src="${qrUrl}" width="200" height="200" alt="QR Code">
+    <br>
+    <a class="qr-download" href="${qrUrl}" download="qr-quan-chi-tui.png">⬇ Tải QR về máy</a>
+  `;
+}
+</script>
+</body>
+</html>
